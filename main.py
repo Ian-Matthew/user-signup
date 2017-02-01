@@ -47,7 +47,7 @@ page_footer = """
 class SignUp(webapp2.RequestHandler):
 
 
-    def generate_form(self,username="", username_error="",password_error="",verify_error="",email_adress=""):
+    def generate_form(self,username="", username_error="",password_error="",verify_error="",email_adress="",email_error=""):
         form = """
         <form action = "/" method ="post">
             <label> Username
@@ -68,10 +68,11 @@ class SignUp(webapp2.RequestHandler):
             <label> Email
                 <input type = "text" name = "email" value="{email}"
             </label>
+            {error4}
             <input type="submit" value="Sign up!"/>
         </form>
         """
-        return form.format(user_name=username,error1=username_error,error2=password_error,error3=verify_error,email=email_adress)
+        return form.format(user_name=username,error1=username_error,error2=password_error,error3=verify_error,email=email_adress, error4=email_error)
 
 
     def get(self):
@@ -95,20 +96,32 @@ class SignUp(webapp2.RequestHandler):
             error = True
         else:
             username_error = ""
+
+
         if not validation.valid_password(password):
             password_error= '''<span class="error">That is not a valid password!</span>'''
             error = True
         else:
             password_error = ""
+
+
         if verified_password != password:
             verify_error= '''<span class="error">Your passwords didn't match</span>'''
             error = True
         else:
             verify_error = ""
 
+
+        if not validation.valid_email(email_adress):
+            email_error = '''<span class="error"> That is not a valid email!</span>'''
+            error = True
+        else:
+            email_error = ""
+
+
         # If there are Errors, generate form and notify the user of errors
         if error:
-            content = page_header + self.generate_form(username,username_error,password_error,verify_error,email_adress) + page_footer
+            content = page_header + self.generate_form(username,username_error,password_error,verify_error,email_adress,email_error) + page_footer
             self.response.write(content)
         else:
             self.redirect("/Welcome?username=" + username)
