@@ -92,7 +92,6 @@ class SignUp(webapp2.RequestHandler):
         # Validate input and generate error messages if needed
         if not validation.valid_username(username):
             username_error = '''<span class="error">That is not a valid username!</span>'''
-            username = ""
             error = True
         else:
             username_error = ""
@@ -114,7 +113,6 @@ class SignUp(webapp2.RequestHandler):
 
         if not validation.valid_email(email_adress):
             email_error = '''<span class="error"> That is not a valid email!</span>'''
-            error = True
         else:
             email_error = ""
 
@@ -133,14 +131,6 @@ class WelcomePage(webapp2.RequestHandler):
         username = self.request.get("username")
         welcome_message = '''<h1>Welcome, ''' + username + '''!</h1>'''
         self.response.write(welcome_message)
-
-
-
-
-
-
-
-
 
 
 app = webapp2.WSGIApplication([
